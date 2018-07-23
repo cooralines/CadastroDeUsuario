@@ -1,0 +1,149 @@
+﻿@model List<CadastroUsusarios.Models.User>
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+    <link type="text/css" rel="stylesheet" href="~/assets/css/bootstrap.min.css" />
+</head>
+<body>
+    <div>
+
+        <div id="vao"></div>
+
+        <div id="modalCriar" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <form id="formCriar">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">Criar Pedido</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="txtNome">Nome</label>
+                                <input type="text" class="form-control" id="txtNome" name="Nome" />
+                            </div>
+                            <div class="form-group">
+                                <label for="txtEmail">Email</label>
+                                <input type="text" class="form-control" id="txtEmail" name="Email" />
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Criar</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <button type="button" onclick="mostrarModalCriar()">Criar...</button>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th></th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                @for (int i = 0; i < Model.Count; i++)
+                {
+                    <tr>
+                        <td>@Model[i].Id</td>
+                        <td>@Model[i].Nome</td>
+                        <td>@Model[i].Email</td>
+                        <td><button type="button" onclick="mostrarModalEditar(@Model[i].Id)">Editar</button></td>
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+
+        <script type="text/javascript" src="~/assets/js/jquery-3.3.1.min.js"></script>
+        <script type="text/javascript" src="~/assets/js/jquery.mask.min.js"></script>
+        <script type="text/javascript" src="~/assets/js/jquery.validate.min.js"></script>
+        <script type="text/javascript" src="~/assets/js/bootstrap.min.js"></script>
+        <script type="text/javascript">
+
+            $("#formCriar").validate({
+                rules: {
+                    Nome: {
+                        required: true,
+                        minlength: 5,
+                        maxlength: 50
+                    },
+
+                    Valor: {
+                        required: true,
+                        min: 0,
+                        max: 1000
+                    }
+                },
+
+                submitHandler: function (form) {
+                    $.ajax({
+                        url: "/Pedido/Criar",
+                        method: "POST",
+                        data: new FormData(document.getElementById("formCriar")),
+                        contentType: false,
+                        processData: false,
+                        success: function (dados) {
+                            if (dados == "ok") {
+                                window.location.reload();
+                            } else {
+                                alert("Erro: " + dados);
+                            }
+                        },
+                        error: function () {
+                            alert("Erro");
+                        }
+                    });
+                }
+            });
+
+
+            function mostrarModalCriar() {
+                $("#modalCriar").modal({
+                    backdrop: "static",
+                    keyboard: false
+                });
+            }
+
+            function mostrarModalEditar(id) {
+                var obj = {
+                    id: id
+                };
+                $.ajax({
+                    url: "/Pedido/ModalEditar",
+                    method: "GET",
+                    cache: false,
+                    data: obj,
+                    success: function (dados) {
+                        $("#vao").html(dados);
+
+                        $("#modalEditar").modal({
+                            backdrop: "static",
+                            keyboard: false
+                        });
+                    },
+                    error: function () {
+                        alert("Erro");
+                    }
+                })
+            }
+
+        </script>
+    </div>
+</body>
+</html>

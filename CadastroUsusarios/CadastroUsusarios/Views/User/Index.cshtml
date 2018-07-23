@@ -1,0 +1,55 @@
+﻿@model List<CadastroUsusarios.Models.User>
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+    <link type="text/css" rel="stylesheet" href="~/assets/css/bootstrap.min.css" />
+    <link type="text/css" rel="stylesheet" href="~/assets/css/CSS.css" />
+</head>
+<body>
+    <div class="container">
+        <div id="vao"></div>
+        <button type="submit" id="novo" class="btn btn-primary">Criar...</button>
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Foto</th>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th>Editar</th>
+                    <th>Excluir</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @for (int i = 0; i < Model.Count; i++)
+                {
+                <tr>
+                    <td>@Model[i].Id</td>
+                    <td><img src="@("http://127.0.0.1:10000/devstoreaccount1/cloud/fotos/" + @Model[i].Id + ".jpg")" height="80" width="80" /></td>
+                    <td>@Model[i].Nome</td>
+                    <td>@Model[i].Email</td>
+                    <td><button type="button" class="btn btn-info" onclick="modalEditar(@Model[i].Id)">Editar</button></td>
+                    <td><button type="button" class="btn btn-danger" onclick="modalExcluir(@Model[i].Id)">Excluir</button></td>
+                </tr>
+                }
+            </tbody>
+        </table>
+
+        <script type="text/javascript" src="~/assets/js/jquery-3.3.1.min.js"></script>
+        <script type="text/javascript" src="~/assets/js/jquery.mask.min.js"></script>
+        <script type="text/javascript" src="~/assets/js/jquery.validate.min.js"></script>
+        <script type="text/javascript" src="~/assets/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="~/assets/js/scripts.js"></script>
+      
+    </div>
+</body>
+</html>
